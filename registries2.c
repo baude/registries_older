@@ -48,7 +48,7 @@ GPtrArray* assemble_array(){
 
 void print_yaml_node(yaml_document_t *document_p, yaml_node_t *node, bool header)
 {
-	unsigned char* heading;
+	char* heading;
 	switch(node->type){
 
 	yaml_node_t *next_node_p;
@@ -74,7 +74,7 @@ void print_yaml_node(yaml_document_t *document_p, yaml_node_t *node, bool header
 			}
 		}
 		else {
-			if (cur_header != "None"){
+			if (g_strcmp0(cur_header, "None") != 0 ){
 				add_value_to_tmp_array(g_strdup((char *)heading));
 			}
 		}
