@@ -142,6 +142,8 @@ gchar* build_json() {
 	keys = g_hash_table_get_keys(hash);
 	for (gint i=0; i< g_list_length(keys); i++){
 		gchar* key = g_list_nth_data(keys, i);
+		if (g_strcmp0(key, "None") == 0)
+			continue;
 		json_builder_set_member_name (builder, key);
 		json_builder_begin_array (builder);
 		GPtrArray* values = g_hash_table_lookup(hash, key);
