@@ -12,8 +12,7 @@ AC_CONFIG_FILES([Makefile])
 
 PKG_PROG_PKG_CONFIG
 #AC_SEARCH_LIBS(yaml, glib-2.0, json-glib-1.0, gio-2.0, gobject-2.0)
-PKG_CHECK_MODULES([GLIB], [glib-2.0], [have_libglib=yes], [have_libglib=no])
-AM_CONDITIONAL([GLIB],  [test "$have_libglib" = "yes"])
+PKG_CHECK_MODULES([GLIB], [glib-2.0])
 
 PKG_CHECK_MODULES([yaml], [yaml-0.1], [have_libyaml=yes], [have_libyaml=no])
 AM_CONDITIONAL([yaml],  [test "$have_libyaml" = "yes"])
