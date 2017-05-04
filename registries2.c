@@ -110,8 +110,8 @@ gchar* get_switch_from_header(char *header) {
 	else if (g_strcmp0("insecure_registries", header) == 0){
 		ret = " --insecure_registries ";
 	}
-	else if (g_strcmp0("blocked_registries", header) == 0){
-		ret = " --blocked_registries ";
+	else if (g_strcmp0("block_registries", header) == 0){
+		ret = " --block_registries ";
 	}
 	return ret;
 }
@@ -146,7 +146,9 @@ gchar* build_json() {
 		json_builder_begin_array (builder);
 		GPtrArray* values = g_hash_table_lookup(hash, key);
 		for (guint j = 0; j < values->len; j++){
-			json_builder_add_string_value(builder, (char *) values->pdata[i]);
+			if (values->pdata[j] != NULL){
+				json_builder_add_string_value(builder, (char *) values->pdata[j]);
+			}
 		}
 		json_builder_end_array (builder);
 	}
