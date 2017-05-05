@@ -1,3 +1,4 @@
 bin_PROGRAMS = registries
 registries_SOURCES = registries.c
-foo_CFLAGS = $(GLIB_CFLAGS)
+registries_CFLAGS = $(REGISTRIES_DEPS_CFLAGS)
+registries_LDADD = $(REGISTRIES_DEPS_LIBS)
