@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 
 	static gboolean json = FALSE;
 	static gchar *input_file;
-	char *conf_file = "docker.conf";
+	char *conf_file = "/etc/registries.conf";
 
 	static GOptionEntry entries[] =
 	{
