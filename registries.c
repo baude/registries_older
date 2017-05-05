@@ -12,19 +12,30 @@
 GArray *registries;
 GHashTable* hash;
 GPtrArray* tmp_values;
-char * headers [] = { "secure_registries", "insecure_registries", "block_registries" };
+char * headers [] = { "registries", "insecure_registries", "block_registries" };
 gchar *cur_header = "None";
 
 
+/*
+ * Add  a single value to the tmp_array
+ */
 void add_value_to_tmp_array(char* value){
 	g_ptr_array_add(tmp_values, g_strdup(value));
 }
 
+/*
+ * Destroy the temporary array and recreate blank
+ */
 void destroy_tmp_array(){
 	g_ptr_array_free(tmp_values, TRUE);
 	tmp_values = g_ptr_array_new();
 }
 
+/*
+ * Determine if a string value is a header
+ *
+ * Returns: bool
+ */
 bool is_string_header(char* header)
 {
 	int i;
@@ -36,6 +47,10 @@ bool is_string_header(char* header)
 	return FALSE;
 }
 
+/*
+ * Iterates the tmp_array values and adds them to a new
+ * NULL terminated ptr_array
+ */
 GPtrArray* assemble_array(){
 	GPtrArray* store_values = g_ptr_array_new();
 	for (guint i = 0; i < tmp_values->len; i++) {
@@ -46,6 +61,9 @@ GPtrArray* assemble_array(){
 	return store_values;
 }
 
+/*
+ * Iterates (recursively if needed) the YAML "tree" from the parser
+ */
 void print_yaml_node(yaml_document_t *document_p, yaml_node_t *node, bool header)
 {
 	char* heading;
@@ -102,10 +120,15 @@ void print_yaml_node(yaml_document_t *document_p, yaml_node_t *node, bool header
 	}
 }
 
+/*
+ * Given a header, returns the proper switch string
+ *
+ * Returns: gchar*
+ */
 gchar* get_switch_from_header(char *header) {
 	gchar* ret = NULL;
-	if (g_strcmp0 ("secure_registries", header) == 0) {
-		ret = " --registries ";
+	if (g_strcmp0 ("registries", header) == 0) {
+		ret = " --add-registry ";
 	}
 	else if (g_strcmp0("insecure_registries", header) == 0){
 		ret = " --insecure_registries ";
@@ -116,6 +139,11 @@ gchar* get_switch_from_header(char *header) {
 	return ret;
 }
 
+/*
+ * Assembles the information in the hash map and returns it in str format
+ *
+ * Returns: gchar*
+ */
 gchar* build_string(){
 	gchar *output = "";
 	// Build hash lookup
@@ -132,6 +160,11 @@ gchar* build_string(){
 	return output;
 }
 
+/*
+ * Assembles the information in the hash map and returns it in JSON format
+ *
+ * Returns: gchar*
+ */
 gchar* build_json() {
 
 	GList *keys;
@@ -169,6 +202,9 @@ gchar* build_json() {
 	return output;
 }
 
+/*
+ * Ensures we the input file exists and we can read it
+ */
 void check_file(gchar *file_name){
 	if (access(file_name, F_OK) == -1){
 		fprintf(stderr, "%s does not exist\n", file_name);
@@ -181,6 +217,24 @@ void check_file(gchar *file_name){
 	}
 }
 
+/*
+ * Writes the output information to a given file.  If an output_variable
+ * is provided, the output information is quoted and the variable is assigned
+ * to it.  Like:
+ *
+ * output_variable="output"
+ */
+void write_to_file(gchar *output, gchar *output_file, gchar *output_variable){
+	FILE *fp;
+	fp = fopen(output_file, "w+");
+	if (output_variable){
+		output = g_strconcat(output_variable, "=\"", output, "\"", NULL);
+	}
+	fprintf(fp, "%s\n", output);
+	fclose(fp);
+
+}
+
 int main(int argc, char *argv[])
 {
 	// Global vars
@@ -189,12 +243,16 @@ int main(int argc, char *argv[])
 
 	static gboolean json = FALSE;
 	static gchar *input_file;
-	char *conf_file = "/etc/registries.conf";
+	static gchar *output_file;
+	static gchar *output_variable;
+	char *conf_file = "/etc/containers/registries.conf";
 
 	static GOptionEntry entries[] =
 	{
+	  { "input", 'i', 0, G_OPTION_ARG_STRING, &input_file, "Specify an input file", NULL },
 	  { "json", 'j', 0, G_OPTION_ARG_NONE, &json, "Output in JSON format", NULL },
-	  { "input", 'i', 0, G_OPTION_ARG_STRING, &input_file, "Specific an input file", NULL },
+	  { "output", 'o', 0, G_OPTION_ARG_STRING, &output_file, "Specify an output file", NULL },
+	  { "variable", 'V', 0, G_OPTION_ARG_STRING, &output_variable, "Specify an variable assignment", NULL },
 	  { NULL }
 	};
 
@@ -259,6 +317,10 @@ int main(int argc, char *argv[])
 	else {
 	 output = build_string();
 	}
-	printf("%s\n", output);
+	if (output_file){
+		write_to_file(output, output_file, output_variable);
+	}
+	else
+		printf("%s\n", output);
 
 }

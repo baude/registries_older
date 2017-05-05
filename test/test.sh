@@ -4,20 +4,20 @@ IFS=$'\n\t'
 #set -x
 #declare -a STR_RESULT
 # Test Suite for registry YAML parsing
-STR_RESULT[0]=' --block_registries registry3 --insecure_registries registry2 --registries registry1'
-JSON_RESULT[0]='{"block_registries":["registry3"],"insecure_registries":["registry2"],"secure_registries":["registry1"]}'
+STR_RESULT[0]=' --block_registries registry3 --insecure_registries registry2 --add-registry registry1'
+JSON_RESULT[0]='{"block_registries":["registry3"],"insecure_registries":["registry2"],"registries":["registry1"]}'
 
-STR_RESULT[1]=' --block_registries registry3 --insecure_registries registry2 --registries registry1 --registries registry1a'
-JSON_RESULT[1]='{"block_registries":["registry3"],"insecure_registries":["registry2"],"secure_registries":["registry1","registry1a"]}'
+STR_RESULT[1]=' --block_registries registry3 --insecure_registries registry2 --add-registry registry1 --add-registry registry1a'
+JSON_RESULT[1]='{"block_registries":["registry3"],"insecure_registries":["registry2"],"registries":["registry1","registry1a"]}'
 
-STR_RESULT[2]=' --registries registry1 --registries registry1a'
-JSON_RESULT[2]='{"secure_registries":["registry1","registry1a"]}'
+STR_RESULT[2]=' --add-registry registry1 --add-registry registry1a'
+JSON_RESULT[2]='{"registries":["registry1","registry1a"]}'
 
-STR_RESULT[3]=' --registries registry1 --registries registry1a'
-JSON_RESULT[3]='{"secure_registries":["registry1","registry1a"]}'
+STR_RESULT[3]=' --add-registry registry1 --add-registry registry1a'
+JSON_RESULT[3]='{"registries":["registry1","registry1a"]}'
 
-STR_RESULT[4]=' --registries registry1 --registries registry1a'
-JSON_RESULT[4]='{"secure_registries":["registry1","registry1a"]}'
+STR_RESULT[4]=' --add-registry registry1 --add-registry registry1a'
+JSON_RESULT[4]='{"registries":["registry1","registry1a"]}'
 
 JSON_RESULT5='{}'
 

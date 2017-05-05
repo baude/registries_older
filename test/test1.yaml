@@ -1,4 +1,4 @@
-secure_registries:
+registries:
   - registry1
   - registry1a
 
