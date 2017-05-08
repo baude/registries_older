@@ -93,7 +93,7 @@ void print_yaml_node(yaml_document_t *document_p, yaml_node_t *node, bool header
 		}
 		else {
 			if (g_strcmp0(cur_header, "None") != 0 ){
-				add_value_to_tmp_array(g_strdup((char *)heading));
+				add_value_to_tmp_array((char *)heading);
 			}
 		}
 		break;
@@ -195,6 +195,7 @@ gchar* build_json() {
 	json_generator_set_root (gen, root);
 	gchar *output = json_generator_to_data (gen, NULL);
 
+	g_list_free(keys);
 	json_node_free (root);
 	g_object_unref (gen);
 	g_object_unref (builder);
@@ -308,7 +309,7 @@ int main(int argc, char *argv[])
 	if (error == 1)
 		return error;
 
-	gchar* output;
+	g_autofree gchar* output;
 
 	if (json){
 		output = build_json();
@@ -322,5 +323,7 @@ int main(int argc, char *argv[])
 	}
 	else
 		printf("%s\n", output);
+
+	 g_option_context_free(context);
 
 }
