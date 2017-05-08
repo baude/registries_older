@@ -56,6 +56,20 @@ for i in "${STR_RESULT[@]}"; do
 
 done
 
+# TEST THE VALUE OUTPUT
+TMP_FILE='/tmp/registries_tmp.out'
+${BINARY} -i "${TEST_DIR}/test1.yaml" -V REGISTRIES -o "${TMP_FILE}"
+RESULTS='REGISTRIES=" --block_registries registry3 --insecure_registries registry2 --add-registry registry1 --add-registry registry1a"'
+TMP_FILE_CONTENTS=$(cat ${TMP_FILE})
+if [[ "${TMP_FILE_CONTENTS}" == "${RESULTS}" ]]; then
+	echo "${space} Output test passed"
+	rm ${TMP_FILE}
+else
+	echo "${space} Output test failed"
+fi
+	
+
+
 set +e
 
 RESULT=$("${BINARY}" -i "${TEST_DIR}/test99.yaml")

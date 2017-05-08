@@ -85,7 +85,7 @@ void print_yaml_node(yaml_document_t *document_p, yaml_node_t *node, bool header
 		break;
 
 	case YAML_SCALAR_NODE:
-		heading = node->data.scalar.value;
+		heading = (char*) node->data.scalar.value;
 		if (header) {
 			if (is_string_header((char*) heading)) {
 				cur_header = heading;
