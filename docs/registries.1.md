@@ -119,6 +119,31 @@ If running as non-root, specify to install the image from the current
 OSTree repository and manage it through systemd and bubblewrap.
 OSTree and bwrap-oci are required for this feature to be available.
 
+# EXAMPLES
+
+To parse the default file location and obtain a result to stdout in string
+format:
+```
+# registries
+```
+
+To parse the default file location and obtain a result to stdout as JSON:
+```
+# registries -j
+```
+
+To parse the default file location and write the results to a file and insert
+a variable that can be exported.
+```
+# registries -o /tmp/foo -V registries
+```
+
+You can also use the -i command line switch to read in a file other than the
+default input file:
+```
+# registries -i /tmp/new_file
+```
+
 # HISTORY
 January 2015, Originally compiled by Daniel Walsh (dwalsh at redhat dot com)
 July 2015, edited by Sally O'Malley (somalley at redhat dot com)
