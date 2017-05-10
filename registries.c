@@ -319,6 +319,9 @@ int main(int argc, char *argv[])
 	 output = build_string();
 	}
 	if (output_file){
+		gchar* output_path = g_path_get_dirname(output_file);
+		//Create the directories in the output path
+		g_mkdir_with_parents (output_path, 755);
 		write_to_file(output, output_file, output_variable);
 	}
 	else
