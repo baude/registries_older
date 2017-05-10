@@ -12,4 +12,8 @@ AC_CONFIG_FILES([Makefile])
 
 PKG_PROG_PKG_CONFIG
 PKG_CHECK_MODULES([REGISTRIES_DEPS], [gio-2.0 json-glib-1.0 yaml-0.1])
+AC_CHECK_PROG(GO_MD2MAN_CHECK,go-md2man,yes)
+if test x"$GO_MD2MAN_CHECK" != x"yes" ; then
+    AC_MSG_ERROR([Please install go-md2man.])
+fi
 AC_OUTPUT

@@ -1,3 +1,4 @@
+include Makefile-docs.am
 bin_PROGRAMS = registries
 registries_SOURCES = registries.c
 registries_CFLAGS = $(REGISTRIES_DEPS_CFLAGS)
